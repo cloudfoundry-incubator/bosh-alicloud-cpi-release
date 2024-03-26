@@ -115,7 +115,7 @@ func (a InstanceManagerImpl) CreateInstance(region string, request map[string]in
 	invoker.AddCatcher(CreateInstanceCatcher_IpUsed)
 	invoker.AddCatcher(CreateInstanceCatcher_IpUsed2)
 
-	action := "CreateInstance"
+	action := "RunInstances"
 	request["ClientToken"] = buildClientToken(action)
 	runtime := util.RuntimeOptions{}
 	runtime.SetAutoretry(true)
@@ -129,7 +129,7 @@ func (a InstanceManagerImpl) CreateInstance(region string, request map[string]in
 			}
 			return e
 		}
-		cid = fmt.Sprint(resp["InstanceId"])
+		cid = fmt.Sprint(resp["InstanceIdSets"].(map[string]interface{})["InstanceIdSet"].([]interface{})[0])
 		return e
 	})
 	return cid, err
